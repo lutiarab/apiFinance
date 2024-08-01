@@ -20,6 +20,9 @@ router.put('/:id', transactionsController.updateTrasactionPut);
 
 router.patch('/:id', transactionsController.updateTrasactionPatch);
 
+//Definindo uma rota para deletar uma trasação 
+
+router.delete('/:id', transactionsController.deleteTransactions);
 
 //Exportar o roteador 
 
