@@ -10,25 +10,50 @@ const getAllTransactions = (req, res) => {
             return;
         }
         res.json(results);
-    });
-};
+    })
+}
 
-//Função para adicionar uma nova transação
 
-const addTransaction = (req,res) => {
+// fução para adicionar uma nova transação -
+
+// Com verificação de  duplicidade 
+
+const addTransaction = (req, res) =>{
     const {date, amount, description, category, account, user_id} = req.body;
+    
+    //Verificar se a transação ja existe 
+
     db.query(
-        'INSERT INTO transactions(date, amount, description, category, account, user_id)VALUES (?,?,?,?,?,?)', 
+        'SELECT * FROM transactions where date =? AND  amount=? AND description=? AND category=? AND account=? AND user_id=?',
         [date, amount, description, category, account, user_id],
-        (err,results) => {
+        (err, results) =>{
             if(err){
-                console.error('Erro ao adicionar trasação', err);
-                res.status(500).sent('Erro ao adicionar transção');
+                console.error('Erro ao adicionar transação', err);
+                res.status(500).send('Erro ao adicionar transação');
                 return;
             }
-            res.status(201).send('Transação adicionada com sucesso');
+            if(results.length> 0){
+                //se a transação já existe
+                res.status(400).send('Transação duplicada')
+            }
+            
+            //Se a transação não existe insere 
+            
+            db.query(
+                `INSERT INTO transactions (date, amount, description, category, account, user_id) values 
+                (?,?,?,?,?,?)`,
+                [date, amount, description, category, account, user_id],
+                (err, results) =>{
+                    if(err){
+                        console.error('Erro ao adicionar transação', err);
+                        results.status(500).send('Erro ao adicionar transação');
+                        return;
+                    }
+                    res.status(201).send('Transação bem sucedida')
+                }
+            );
         }
-    );
+    )
 };
 
 //função para atualizar uma trasação existente (substituição completa)
@@ -45,6 +70,12 @@ const updateTrasactionPut = (req, res) => {
                 results.status(500).send('Erro ao adicionar transção');
                 return;
             }
+
+            if(results.affectedRows===0){
+                res.status(404).send('Transação não encontrada');
+                return;
+            }
+
             res.send('Transação adicionada com sucesso');
         }
        
@@ -74,6 +105,12 @@ const updateTrasactionPatch = (req,res) => {
                 res.status(500).send('Erro ao adicionar transação');
                 return;
             }
+
+            if(results.affectedRows===0){
+                res.status(404).send('Transação não encontrada');
+                return;
+            }
+
             res.send('Transação atualizada com sucesso');
         } 
     );
@@ -91,6 +128,12 @@ db.query('DELETE FROM transactions WHERE id = ?',[id],
             res.status(500).send('Erro ao adicionar transação');
             return;
         }
+
+        if(results.affectedRows===0){
+            res.status(404).send('Transação não encontrada');
+            return;
+        }
+
         res.send('Transação atualizada com sucesso');
     } 
 );
