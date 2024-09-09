@@ -43,3 +43,24 @@ const PORT = process.env.PORT || 3000; // Define a porta a partir da variável d
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`); // Loga uma mensagem informando que o servidor está rodando
 });
+
+const dotenv = require('dotenv'); // Importa o pacote dotenv para gerenciar variáveis de ambiente
+
+ 
+// Carregar as Variáveis de Ambiente 
+
+dotenv.config(); // Carrega as variáveis definidas no arquivo .env para process.env
+
+// Importar as Bibliotecas 
+
+const express = require('express'); // Importa o framework Express 
+
+const cors = require('cors'); // Importa o pacote cors para permitir requisições de diferentes origens
+ 
+const bodyParser = require('body-parser'); // Importa o pacote body-parser para analisar o corpo das requisições HTTP
+ 
+const db = require('./config/db'); // Importa a conexão com o banco de dados
+
+// Importa as rotas de transações 
+const transactionsRoutes = require('./routes/transactions');  
+
