@@ -1,30 +1,25 @@
-const express = require('express');//importar a fremework express
+const express= require('express'); // Importar a framework express
 const router = express.Router(); //Criar um roteador
-const transactionsController = require('../controllers/transactionsController'); //importar o controlador
+const transactionsController = require('../controllers/transactionsController'); // Importa o controlador 
 
-//Definir uma rota para obter todas as transações
+const authMiddleware = require('../middlewares/authMiddleware'); // Importa o middleware de autenticação 
 
-router.get('/',transactionsController.getAllTransactions);
 
+// Definindo uma rota para obter todas as transações
+router.get('/', authMiddleware, transactionsController.getAllTransactions);
 
 //Definindo uma rota para adicionar uma nova transação
-
-router.post('/',transactionsController.addTransaction);
-
+router.post('/', authMiddleware, transactionsController.addTransaction);
 
 //Definindo uma rota para atualizar uma trasação existente(substituição completa)
+router.put('/:id', authMiddleware, transactionsController.updateTransactionPut);
 
-router.put('/:id', transactionsController.updateTrasactionPut);
+//Definindo uma rota para atualizar uma trasação existente(substituição parcial)
+router.patch('/:id', authMiddleware, transactionsController.updateTransactionPatch);
 
-//Definindo uma rota para atualizar uma trasação existente(substituição completa)
+//Definindo uma rota para deletar uma transação
+router.delete('/:id', authMiddleware, transactionsController.deleteTransactions);
 
-router.patch('/:id', transactionsController.updateTrasactionPatch);
-
-//Definindo uma rota para deletar uma trasação 
-
-router.delete('/:id', transactionsController.deleteTransactions);
-
-//Exportar o roteador 
+//Exportando o roteador
 
 module.exports = router;
-
