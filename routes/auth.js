@@ -8,10 +8,11 @@ router.post('/register', authController.registerUser);
 // Rota para login de usuário 
 router.post('/login', authController.loginUser); 
 
-// Rota para solicitar redefinição de senha 
-router.post('/request-password-reset', authController.requestPasswordReset); 
+// Rota para solicitar redefinição de senha
+router.post('/request-password-reset', authController.requestPasswordReset);
 
-// Rota para redefinir a senha 
+// Rota para redefinir a senha
 router.post('/reset-password', authController.resetPassword); 
 
-module.exports = router; // Exporta o roteador 
+
+module.exports = router; // Exporta o roteador
