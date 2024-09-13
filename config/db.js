@@ -1,5 +1,14 @@
 //Importar a iblioteca mysql2 e criar a conexão  com o banco de dados
+
 const mysql= require('mysql2'); // importa o pacote mysql2 para conectar
+
+// Exibe as variáveis de ambiente carregadas
+//depois pode apagar
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASS:', process.env.DB_PASS);
+console.log('DB_NAME:', process.env.DB_NAME);
+
 const db = mysql.createConnection({
     host:process.env.DB_HOST, // Endereço do servidor de banco de dados
     user:process.env.DB_USER, // Nome do Usuario para acessar o banco de dados

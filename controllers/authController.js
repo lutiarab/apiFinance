@@ -82,19 +82,19 @@ const requestPasswordReset = async (req, res) => {
 
    // Função para redefinir a senha
    const resetPassword = async (req, res) => {
-    const { token, newPassword } = req.body;
-    try {
-    const [user] = await db.promise().query('SELECT * FROM users WHERE reset_password_token = ? AND reset_password_expires > NOW()', [token]);
-    if (user.length === 0) {
-    return res.status(400).send('Token inválido ou expirado');
-    }
-    const hashedPassword = await bcrypt.hash(newPassword, 10); // Criptografa a nova senha
-    await db.promise().query('UPDATE users SET password = ?, reset_password_token = NULL, reset_password_expires = NULL WHERE id = ?', [hashedPassword, user[0].id]);
-    res.send('Senha redefinida com sucesso');
-    } catch (err) {
-    console.error('Erro ao redefinir senha:', err);
-    res.status(500).send('Erro ao redefinir senha');
-    }
+        const { token, newPassword } = req.body;
+        try {
+        const [user] = await db.promise().query('SELECT * FROM users WHERE reset_password_token = ? AND reset_password_expires > NOW()', [token]);
+        if (user.length === 0) {
+        return res.status(400).send('Token inválido ou expirado');
+        }
+        const hashedPassword = await bcrypt.hash(newPassword, 10); // Criptografa a nova senha
+        await db.promise().query('UPDATE users SET password = ?, reset_password_token = NULL, reset_password_expires = NULL WHERE id = ?', [hashedPassword, user[0].id]);
+        res.send('Senha redefinida com sucesso');
+        } catch (err) {
+        console.error('Erro ao redefinir senha:', err);
+        res.status(500).send('Erro ao redefinir senha');
+        }
    }; 
 
 module.exports = { 
